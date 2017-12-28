@@ -1,0 +1,22 @@
+{
+  "name": "nde-statistics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint *.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-improved": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "lodash": "^4.17.4",
+    "superagent": "^3.8.2"
+  }
+}
