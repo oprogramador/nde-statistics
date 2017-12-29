@@ -16,7 +16,12 @@ const getData = html => _.mapValues(
     .trim()
 );
 
-const filterData = record => _.values(record).every(value => value.length < 1000);
+const filterData = (record) => {
+  const values = _.values(record);
+
+  return values.every(value => value.length < 1000) &&
+    values.some(value => value.length);
+};
 
 (async () => {
   const mainText = (await request(url)).text;
@@ -31,7 +36,7 @@ const filterData = record => _.values(record).every(value => value.length < 1000
       )
     )
   )
-    .filter(link => /\.html$/.test(link)).splice(0, 100);
+    .filter(link => /\.html$/.test(link)).splice(0, 1000);
   const data = await Promise.all(
     finalLinks.map(link => request(link).then(({ text }) => getData(text)).catch(error => console.error(error)))
   );
