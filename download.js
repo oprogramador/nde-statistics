@@ -1,6 +1,7 @@
 const request = require('superagent');
 const cheerio = require('cheerio');
 const _ = require('lodash');
+const csvStringify = require('csv-stringify-as-promised');
 
 const url = 'http://www.nderf.org/NDERF/NDE_Archives/archives_main.htm';
 const questions = {
@@ -40,5 +41,6 @@ const filterData = (record) => {
   const data = await Promise.all(
     finalLinks.map(link => request(link).then(({ text }) => getData(text)).catch(error => console.error(error)))
   );
-  console.log(data.filter(filterData));
+  const outputData = data.filter(filterData);
+  console.log(await csvStringify(outputData));
 })();
