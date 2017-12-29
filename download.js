@@ -3,9 +3,20 @@ const cheerio = require('cheerio');
 const _ = require('lodash');
 
 const url = 'http://www.nderf.org/NDERF/NDE_Archives/archives_main.htm';
-const beforeQuestion = 'What was your religion prior to your experience?';
+const questions = {
+  before: 'What was your religion prior to your experience?',
+  change: 'Have your religious practices changed since your experience?',
+  now: 'What is your religion now?',
+};
 
-const getData = html => cheerio.load(html)(`span:contains("${beforeQuestion}")`).parent().text();
+const getData = html => _.mapValues(
+  questions,
+  question => cheerio.load(html)(`span:contains("${question}")`).parent().text()
+    .replace(question, '')
+    .trim()
+);
+
+const filterData = record => _.values(record).every(value => value.length < 1000);
 
 (async () => {
   const mainText = (await request(url)).text;
@@ -24,5 +35,5 @@ const getData = html => cheerio.load(html)(`span:contains("${beforeQuestion}")`)
   const data = await Promise.all(
     finalLinks.map(link => request(link).then(({ text }) => getData(text)).catch(error => console.error(error)))
   );
-  console.log(data.filter(x => x.length < 1000));
+  console.log(data.filter(filterData));
 })();
